@@ -1,0 +1,731 @@
+<div class="container">
+    <mat-toolbar>
+      <div class="example-spacer"></div>
+    
+      <div class="example-spacer"></div>
+    </mat-toolbar>    
+  </div>
+
+
+  <div class="container" *ngIf="mostrarAdministrador">
+    <mat-toolbar>
+        <span>Gobierno Subnacional</span>
+      </mat-toolbar>
+
+      <mat-card style="margin-top: 10 px;">
+        <form >
+            <mat-grid-list cols="4" rowHeight="70px">
+                <mat-grid-tile [colspan]="1" [rowspan] = "1" >
+                  <mat-form-field class="anchoText">
+                    <mat-label>Departamento</mat-label>
+                    <mat-select>
+                      <mat-option *ngFor="let food of departamento" [value]="food.value">
+                        {{food.viewValue}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </mat-grid-tile>               
+                <mat-grid-tile [colspan]="1" [rowspan] = "1">
+                  <mat-form-field class="anchoText">
+                    <mat-label>Provincia</mat-label>
+                    <mat-select>
+                      <mat-option *ngFor="let food of provincia" [value]="food.value">
+                        {{food.viewValue}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </mat-grid-tile>
+                <mat-grid-tile [colspan]="1" [rowspan] = "1" >
+                  <mat-form-field class="anchoText">
+                    <mat-label>Distrito</mat-label>
+                    <mat-select>
+                      <mat-option *ngFor="let food of distrito" [value]="food.value">
+                        {{food.viewValue}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </mat-grid-tile>
+                <mat-grid-tile [colspan]="1" [rowspan] = "1" >
+                  <mat-form-field class="anchoText">
+                    <mat-label>Tipo de Gobierno</mat-label>
+                    <mat-select>
+                      <mat-option *ngFor="let food of tipoGobierno" [value]="food.value">
+                        {{food.viewValue}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </mat-grid-tile>
+            </mat-grid-list>
+
+            <mat-grid-list cols="4" rowHeight="70px">
+
+              <mat-grid-tile [colspan]="2" [rowspan] = "1">
+                <div class="example-spacer"></div>
+                <div class="example-spacer"></div>
+                <div class="example-spacer"></div>
+                  <button mat-raised-button type="submit" routerLink="/dashboard/usuarios" style="margin-right: 20;">Limpiar</button>
+                  <div class="example-spacer"></div>
+                  
+              </mat-grid-tile>
+
+              <mat-grid-tile [colspan]="2" [rowspan] = "1">
+                
+                  <button mat-raised-button type="submit" color="primary" routerLink="/dashboard/crear-usuario">Registrar</button>
+                  <div class="example-spacer"></div>
+              </mat-grid-tile>
+
+            </mat-grid-list>
+
+                <div *ngIf="listGobiernoSubnacional.length > 0">
+                  <mat-form-field appearance="standard">
+                    <mat-label>Filtro</mat-label>
+                    <input matInput (keyup)="applyFilter($event)" placeholder="Ingresar parámetro" #input autocomplete="off">
+                  </mat-form-field>
+                  <div class="mat-elevation-z8">
+                    <table mat-table [dataSource]="dataSource" matSort>
+                  
+                        <!-- Position Column -->
+                        <ng-container matColumnDef="departamento">
+                          <th mat-header-cell *matHeaderCellDef mat-sort-header> Departamento </th>
+                          <td mat-cell *matCellDef="let element"> {{element.departamento}} </td>
+                        </ng-container>
+                      
+                        <!-- Name Column -->
+                        <ng-container matColumnDef="provincia">
+                          <th mat-header-cell *matHeaderCellDef mat-sort-header> Provincia </th>
+                          <td mat-cell *matCellDef="let element"> {{element.provincia}} </td>
+                        </ng-container>
+                      
+                        <!-- Weight Column -->
+                        <ng-container matColumnDef="distrito">
+                          <th mat-header-cell *matHeaderCellDef mat-sort-header> Distrito </th>
+                          <td mat-cell *matCellDef="let element"> {{element.distrito}} </td>
+                        </ng-container>
+                      
+                        <!-- Symbol Column -->
+                        <ng-container matColumnDef="tipoGobierno">
+                          <th mat-header-cell *matHeaderCellDef> Tipo de Gobierno </th>
+                          <td mat-cell *matCellDef="let element"> {{element.tipoGobierno}} </td>
+                        </ng-container>
+                
+                        <ng-container matColumnDef="acciones">
+                            <th mat-header-cell *matHeaderCellDef></th>
+                            <td mat-cell *matCellDef="let element; let i = index" style="text-align: right;"> 
+                              <a class="pointer" style="color: #1878b0;" (click)="setStep(0)"  matTooltip="Ver Rutas">
+                                <mat-icon>route</mat-icon>
+                              </a>
+                              <a class="pointer" style="color: #1878b0;" (click)="setStep(1)"  matTooltip="Agregar Empresa">
+                                <mat-icon>emoji_transportation</mat-icon>
+                              </a>
+                                <a class="pointer" style="color: #1f516f;"  matTooltip="Editar Gobierno">
+                                    <mat-icon>edit</mat-icon>
+                                </a>
+                                <a class="pointer" (click)="eliminarGobiernoSubnacional(i)" style="color: #e15639;"  matTooltip="Eliminar Gobierno Subnacional">
+                                    <mat-icon>delete</mat-icon>
+                                </a>
+                            </td>
+                          </ng-container>
+                      
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                      </table>
+                      <mat-paginator [pageSizeOptions]="[5, 10, 20]"showFirstLastButtons 
+                      aria-label="Select page of periodic elements">
+                    </mat-paginator>
+                  </div>
+                </div>
+            
+            <h2 *ngIf="listGobiernoSubnacional.length == 0">No hay Gobiernos Subnacionales para mostrar</h2>
+       
+        </form>
+    </mat-card>
+  </div>
+
+
+<div class="container">
+    <mat-card style="margin-top: 10 px;">
+      <form >
+      
+        <div id="DivRutas" *ngIf="mostrarRutas">
+
+          <mat-accordion class="example-headers-align" >
+            <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)" hideToggle>
+              <mat-expansion-panel-header>
+                <mat-toolbar>
+                  <span>Rutas</span>
+                </mat-toolbar>
+                <mat-panel-description>
+                    <a class="pointer" style="color: #1878b0;"  matTooltip="Ver Rutas">
+                        <mat-icon>route</mat-icon>
+                    </a>
+                </mat-panel-description>
+              </mat-expansion-panel-header>
+        
+                  <mat-card style="margin-top: 10 px;">
+                      <form >
+                    
+                      <mat-grid-list cols="4" rowHeight="70px">
+  
+                          <mat-grid-tile [colspan]="1" [rowspan] = "1" >
+                            <mat-form-field class="anchoText" appearance="fill">
+                              <mat-label>Codigo Ruta</mat-label>
+                              <input type="CodigoRuta" matInput autocomplete="off">
+                            </mat-form-field>
+                          </mat-grid-tile>
+                
+                
+                          <mat-grid-tile [colspan]="1" [rowspan] = "1" >
+                            <mat-form-field class="anchoText" appearance="fill">
+                              <mat-label>Origen</mat-label>
+                              <input type="Origen" matInput autocomplete="off">
+                            </mat-form-field>
+                          </mat-grid-tile>
+                
+                          <mat-grid-tile [colspan]="1" [rowspan] = "1" >
+                            <mat-form-field class="anchoText" appearance="fill">
+                              <mat-label>Itinerario</mat-label>
+                              <input type="Itinerario" matInput autocomplete="off">
+                            </mat-form-field>
+                          </mat-grid-tile>
+                
+                          <mat-grid-tile [colspan]="1" [rowspan] = "1" >
+                            <mat-form-field class="anchoText" appearance="fill">
+                              <mat-label>Destino</mat-label>
+                              <input type="Destino" matInput autocomplete="off">
+                            </mat-form-field>
+                          </mat-grid-tile>
+                          
+                      </mat-grid-list>
+                
+                      <mat-grid-list cols="4" rowHeight="70px">
+                
+                        <mat-grid-tile [colspan]="2" [rowspan] = "1">
+                          <div class="example-spacer"></div>
+                          <div class="example-spacer"></div>
+                          <div class="example-spacer"></div>
+                            <button mat-raised-button type="submit" routerLink="/dashboard/usuarios" style="margin-right: 20;">Volver</button>
+                            <div class="example-spacer"></div>
+                            
+                        </mat-grid-tile>
+                
+                        <mat-grid-tile [colspan]="2" [rowspan] = "1">
+                          
+                            <button mat-raised-button type="submit" color="primary" routerLink="/dashboard/crear-usuario">Registrar</button>
+                            <div class="example-spacer"></div>
+                        </mat-grid-tile>
+                
+                      </mat-grid-list>
+                
+                
+                      <div *ngIf="listRutas.length > 0">
+                        <mat-form-field appearance="standard">
+                          <mat-label>Filtro</mat-label>
+                          <input matInput (keyup)="applyFilterRutas($event)" placeholder="Ingresar parámetro" #input autocomplete="off">
+                        </mat-form-field>
+                        <div class="mat-elevation-z8">
+                          <table mat-table [dataSource]="dataSourceRutas" matSort>
+                        
+                            <!-- Position Column -->
+                            <ng-container matColumnDef="codigoRuta">
+                              <th mat-header-cell *matHeaderCellDef mat-sort-header> Código Ruta </th>
+                              <td mat-cell *matCellDef="let element"> {{element.codigoRuta}} </td>
+                            </ng-container>
+                          
+                            <!-- Name Column -->
+                            <ng-container matColumnDef="origen">
+                              <th mat-header-cell *matHeaderCellDef mat-sort-header> Origen </th>
+                              <td mat-cell *matCellDef="let element"> {{element.origen}} </td>
+                            </ng-container>
+                          
+                            <!-- Weight Column -->
+                            <ng-container matColumnDef="itinerario">
+                              <th mat-header-cell *matHeaderCellDef mat-sort-header> Itinerario </th>
+                              <td mat-cell *matCellDef="let element"> {{element.itinerario}} </td>
+                            </ng-container>
+                          
+                            <!-- Symbol Column -->
+                            <ng-container matColumnDef="destino">
+                              <th mat-header-cell *matHeaderCellDef> Destino </th>
+                              <td mat-cell *matCellDef="let element"> {{element.destino}} </td>
+                            </ng-container>
+                    
+                            <ng-container matColumnDef="acciones">
+                                <th mat-header-cell *matHeaderCellDef></th>
+                                <td mat-cell *matCellDef="let element; let i = index" style="text-align: right;"> 
+                                  
+                                    <a class="pointer" style="color: #1f516f;"  matTooltip="Editar Rutas">
+                                        <mat-icon>edit</mat-icon>
+                                    </a>
+                                    <a class="pointer" (click)="eliminarRutas(i)" style="color: #e15639;"  matTooltip="Eliminar Rutas">
+                                        <mat-icon>delete</mat-icon>
+                                    </a>
+                                </td>
+                              </ng-container>
+                          
+                            <tr mat-header-row *matHeaderRowDef="displayedColumnsRutas"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumnsRutas;"></tr>
+                          </table>
+                            <mat-paginator [pageSizeOptions]="[5, 10, 20]"showFirstLastButtons 
+                            aria-label="Select page of periodic elements">
+                          </mat-paginator>
+                        </div>
+                      </div>
+                  
+                    <h2 *ngIf="listRutas.length == 0">No hay Rutas para mostrar</h2>                  
+                          
+                      </form>
+                  </mat-card>
+          
+            
+            </mat-expansion-panel>
+          
+            
+          </mat-accordion>  
+        </div>
+  
+      </form>
+    </mat-card>
+</div>    
+
+
+
+<div class="container">
+  <mat-card style="margin-top: 10 px;">
+    <form >
+  
+      <div id="DivEmpresa" *ngIf="mostrarEmpresas">
+        <mat-accordion class="example-headers-align" >
+          <mat-expansion-panel [expanded]="step === 1" (opened)="setStep(1)" hideToggle>
+            <mat-expansion-panel-header>
+              <mat-toolbar>
+                <span>Empresas</span>
+              </mat-toolbar>
+              <mat-panel-description>
+                <a class="pointer" style="color: #1878b0;"  matTooltip="Agregar Empresa">
+                  <mat-icon>emoji_transportation</mat-icon>
+                </a>
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            <mat-card style="margin-top: 10 px;">
+              <form >
+                <mat-grid-list cols="4" rowHeight="70px">
+
+                  <mat-grid-tile [colspan]="1" [rowspan] = "1" >
+                    <mat-form-field class="anchoText" appearance="fill">
+                      <mat-label>Ruc</mat-label>
+                      <input type="Ruc" matInput autocomplete="off">
+                    </mat-form-field>
+                    <a class="pointer" style="color: #1878b0;" matTooltip="Buscar RUC Empresa">
+                      <mat-icon>search</mat-icon>
+                    </a>
+                  </mat-grid-tile>
+        
+        
+                  <mat-grid-tile [colspan]="1" [rowspan] = "1" >
+                    <mat-form-field class="anchoText" appearance="fill">
+                      <mat-label>Descripción</mat-label>
+                      <input type="Descripcion" matInput autocomplete="off">
+                      
+                    </mat-form-field>
+                    <a class="pointer" style="color: #1878b0;" matTooltip="Buscar Nombre Empresa">
+                      <mat-icon>search</mat-icon>
+                    </a>
+                  </mat-grid-tile>
+
+                  <mat-grid-tile [colspan]="2" [rowspan] = "1" >
+                    <mat-form-field class="anchoText">
+                      <mat-label>Ruta Autorizada</mat-label>
+                      <mat-select>
+                        <mat-option *ngFor="let food of estadoRutaAutorizada" [value]="food.value">
+                          {{food.viewValue}}
+                        </mat-option>
+                      </mat-select>
+                      
+                    </mat-form-field>
+                    <mat-checkbox class="example-margin" >Activo</mat-checkbox>
+                  </mat-grid-tile>
+
+          
+              </mat-grid-list>
+        
+              <mat-grid-list cols="4" rowHeight="70px">
+        
+                <mat-grid-tile [colspan]="2" [rowspan] = "1">
+                  <div class="example-spacer"></div>
+                  <div class="example-spacer"></div>
+                  <div class="example-spacer"></div>
+                    <button mat-raised-button type="submit" routerLink="/dashboard/usuarios" style="margin-right: 20;">Volver</button>
+                    <div class="example-spacer"></div>
+                    
+                </mat-grid-tile>
+        
+                <mat-grid-tile [colspan]="2" [rowspan] = "1">
+                  
+                    <button mat-raised-button type="submit" color="primary" routerLink="/dashboard/crear-usuario">Registrar</button>
+                    <div class="example-spacer"></div>
+                </mat-grid-tile>
+        
+              </mat-grid-list>
+        
+        
+              <div *ngIf="listEmpresas.length > 0">
+                <mat-form-field appearance="standard">
+                  <mat-label>Filtro</mat-label>
+                  <input matInput (keyup)="applyFilterEmpresas($event)" placeholder="Ingresar parámetro" #input autocomplete="off">
+                </mat-form-field>
+                <div class="mat-elevation-z8">
+                  <table mat-table [dataSource]="dataSourceEmpresas" matSort>
+                
+                    <!-- Position Column -->
+                    <ng-container matColumnDef="ruc">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header> RUC </th>
+                      <td mat-cell *matCellDef="let element"> {{element.ruc}} </td>
+                    </ng-container>
+                  
+                    <!-- Name Column -->
+                    <ng-container matColumnDef="descripcion">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header> Descripción </th>
+                      <td mat-cell *matCellDef="let element"> {{element.descripcion}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="estado">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header> Estado </th>
+                      <td mat-cell *matCellDef="let element"> {{element.estado}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="estadoRutaAutorizada">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header> Ruta Autorizada </th>
+                      <td mat-cell *matCellDef="let element"> {{element.estadoRutaAutorizada}} </td>
+                    </ng-container>
+                  
+                    <ng-container matColumnDef="acciones">
+                        <th mat-header-cell *matHeaderCellDef></th>
+                        <td mat-cell *matCellDef="let element; let i = index" style="text-align: right;"> 
+                          
+                            <a class="pointer" style="color: #1878b0;"  matTooltip="Editar Empresa">
+                                <mat-icon>edit</mat-icon>
+                            </a>
+
+                            <a class="pointer" style="color: #1878b0;"  matTooltip="Resolución">
+                              <mat-icon>description</mat-icon>
+                            </a>
+                            
+                            <a class="pointer" style="color: #1878b0;" (click)="verVehiculo()"  matTooltip="Registrar Vehículo">
+                              <mat-icon>local_shipping</mat-icon>
+                            </a>
+
+                            <a class="pointer" (click)="eliminarEmpresas(i)" style="color: #e15639;"  matTooltip="Eliminar Empresas">
+                                <mat-icon>delete</mat-icon>
+                            </a>
+                        </td>
+                      </ng-container>
+                  
+                    <tr mat-header-row *matHeaderRowDef="displayedColumnsEmpresas"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumnsEmpresas;"></tr>
+                  </table>
+                    <mat-paginator [pageSizeOptions]="[5, 10, 20]"showFirstLastButtons 
+                    aria-label="Select page of periodic elements">
+                  </mat-paginator>
+                </div>
+              </div>
+          
+            <h2 *ngIf="listEmpresas.length == 0">No hay Rutas para mostrar</h2>                  
+                  
+              </form>
+          </mat-card>
+        
+          </mat-expansion-panel>
+        </mat-accordion>  
+      </div>  
+
+    </form>
+  </mat-card>
+</div>    
+
+<div class="container">
+  <mat-card style="margin-top: 10 px;">
+    <form >
+  
+      <div id="DivVehiculo" *ngIf="mostrarVehiculo">
+        <mat-accordion class="example-headers-align" >
+          <mat-expansion-panel [expanded]="step === 2" (opened)="setStep(2)" hideToggle>
+            <mat-expansion-panel-header>
+              <mat-toolbar>
+                <span>Vehículos</span>
+              </mat-toolbar>
+              <mat-panel-description>
+                <a class="pointer" style="color: #1878b0;"  matTooltip="Agregar Vehículo">
+                  <mat-icon>local_shipping</mat-icon>
+                </a>
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            <mat-card style="margin-top: 10 px;">
+              <form >
+                <mat-grid-list cols="4" rowHeight="70px">
+                  <mat-grid-tile [colspan]="1" [rowspan] = "1" >
+                    <mat-form-field class="anchoText" appearance="fill">
+                      <mat-label>Placa</mat-label>
+                      <input type="Placa" matInput autocomplete="off">
+                    </mat-form-field>
+                    <a class="pointer" style="color: #1878b0;" matTooltip="Buscar Placa Vehículo">
+                      <mat-icon>search</mat-icon>
+                    </a>
+                  </mat-grid-tile>
+        
+                  <mat-grid-tile [colspan]="1" [rowspan] = "1" >
+                    <mat-form-field class="anchoText" appearance="fill">
+                      <mat-label>Fecha Vigencia</mat-label>
+                      <input matInput [matDatepicker]="picker1">
+                      <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                      <mat-datepicker #picker1></mat-datepicker>
+                    </mat-form-field>
+                  </mat-grid-tile>
+                  
+                  <mat-grid-tile [colspan]="1" [rowspan] = "1" >
+                    <mat-form-field class="anchoText" appearance="fill">
+                      <mat-label>Fin Vigencia</mat-label>
+                      <input matInput [matDatepicker]="picker2">
+                      <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                      <mat-datepicker #picker2></mat-datepicker>
+                    </mat-form-field>
+                  </mat-grid-tile>
+                </mat-grid-list>
+          
+                <mat-grid-list cols="4" rowHeight="70px">
+                  <mat-grid-tile [colspan]="2" [rowspan] = "1">
+                    <div class="example-spacer"></div>
+                    <div class="example-spacer"></div>
+                    <div class="example-spacer"></div>
+                      <button mat-raised-button type="submit" routerLink="/dashboard/usuarios" style="margin-right: 20;">Volver</button>
+                      <div class="example-spacer"></div>
+                      
+                  </mat-grid-tile>
+          
+                  <mat-grid-tile [colspan]="2" [rowspan] = "1">
+                    
+                      <button mat-raised-button type="submit" color="primary" routerLink="/dashboard/crear-usuario">Registrar</button>
+                      <div class="example-spacer"></div>
+                  </mat-grid-tile>
+                </mat-grid-list>
+          
+          
+                <div *ngIf="listVehiculos.length > 0">
+                  <mat-form-field appearance="standard">
+                    <mat-label>Filtro</mat-label>
+                    <input matInput (keyup)="applyFilterVehiculos($event)" placeholder="Ingresar parámetro" #input autocomplete="off">
+                  </mat-form-field>
+                  <div class="mat-elevation-z8">
+                    <table mat-table [dataSource]="dataSourceVehiculos" matSort>
+                  
+                      <!-- Position Column -->
+                      <ng-container matColumnDef="placa">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Placa </th>
+                        <td mat-cell *matCellDef="let element"> {{element.placa}} </td>
+                      </ng-container>
+                    
+                      <!-- Name Column -->
+                      <ng-container matColumnDef="fechaVigencia">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Fecha Vigencia </th>
+                        <td mat-cell *matCellDef="let element"> {{element.fechaVigencia}} </td>
+                      </ng-container>
+                    
+                      <!-- Weight Column -->
+                      <ng-container matColumnDef="finVigencia">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Fin Vigencia </th>
+                        <td mat-cell *matCellDef="let element"> {{element.finVigencia}} </td>
+                      </ng-container>
+                    
+                      <!-- Symbol Column -->
+                      <ng-container matColumnDef="estadoVehiculo">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Estado </th>
+                        <td mat-cell *matCellDef="let element"> {{element.estadoVehiculo}} </td>
+                      </ng-container>
+              
+                      <ng-container matColumnDef="acciones">
+                          <th mat-header-cell *matHeaderCellDef></th>
+                          <td mat-cell *matCellDef="let element; let i = index" style="text-align: right;"> 
+                            
+                              <a class="pointer" style="color: #1f516f;"  matTooltip="Editar Vehículo">
+                                  <mat-icon>edit</mat-icon>
+                              </a>
+                              <a class="pointer" (click)="eliminarVehiculos(i)" style="color: #e15639;"  matTooltip="Eliminar Vehículo">
+                                  <mat-icon>delete</mat-icon>
+                              </a>
+                          </td>
+                        </ng-container>
+                    
+                      <tr mat-header-row *matHeaderRowDef="displayedColumnsVehiculos"></tr>
+                      <tr mat-row *matRowDef="let row; columns: displayedColumnsVehiculos;"></tr>
+                    </table>
+                      <mat-paginator [pageSizeOptions]="[5, 10, 20]"showFirstLastButtons 
+                      aria-label="Select page of periodic elements">
+                    </mat-paginator>
+                  </div>
+                </div>
+              
+              <h2 *ngIf="listVehiculos.length == 0">No hay Rutas para mostrar</h2>                               
+                    
+              </form>
+            </mat-card>
+        
+          </mat-expansion-panel>
+        </mat-accordion>  
+      </div>  
+
+    </form>
+  </mat-card>
+</div>    
+
+
+<div class="container">
+  <mat-card style="margin-top: 10 px;">
+    <form >
+  
+      <div id="DivResolucion" *ngIf="mostrarResolucion">
+        <mat-accordion class="example-headers-align" >
+          <mat-expansion-panel [expanded]="step === 3" (opened)="setStep(3)" hideToggle>
+            <mat-expansion-panel-header>
+              <mat-toolbar>
+                <span>Resolución</span>
+              </mat-toolbar>
+              <mat-panel-description>
+                <a class="pointer" style="color: #1878b0;"  matTooltip="Agregar Resolución">
+                  <mat-icon>description</mat-icon>
+                </a>
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            <mat-card style="margin-top: 10 px;">
+              <form >
+                <mat-grid-list cols="4" rowHeight="70px">
+                  <mat-grid-tile [colspan]="2" [rowspan] = "1" >
+                    <mat-form-field class="anchoText" appearance="fill">
+                      <mat-label>Fecha Emisión</mat-label>
+                      <input matInput [matDatepicker]="fechaEmision">
+                      <mat-datepicker-toggle matSuffix [for]="fechaEmision"></mat-datepicker-toggle>
+                      <mat-datepicker #fechaEmision></mat-datepicker>
+                    </mat-form-field>
+                  </mat-grid-tile>
+        
+                  <mat-grid-tile [colspan]="2" [rowspan] = "1" >
+                    <mat-form-field class="anchoText" appearance="fill">
+                      <mat-label>Fecha Vigencia</mat-label>
+                      <input matInput [matDatepicker]="inicioVigencia">
+                      <mat-datepicker-toggle matSuffix [for]="inicioVigencia"></mat-datepicker-toggle>
+                      <mat-datepicker #inicioVigencia></mat-datepicker>
+                    </mat-form-field>
+                  </mat-grid-tile>
+
+                                   
+                  <mat-grid-tile [colspan]="2" [rowspan] = "1" >
+                    <mat-form-field class="anchoText" appearance="fill">
+                      <mat-label>Fin Vigencia</mat-label>
+                      <input matInput [matDatepicker]="finVigencia">
+                      <mat-datepicker-toggle matSuffix [for]="finVigencia"></mat-datepicker-toggle>
+                      <mat-datepicker #finVigencia></mat-datepicker>
+                    </mat-form-field>
+                  </mat-grid-tile>
+
+                  <mat-grid-tile [colspan]="2" [rowspan] = "1" >
+                    <mat-form-field class="anchoText">
+                      <mat-label>Ambito</mat-label>
+                      <mat-select>
+                        <mat-option *ngFor="let food of tipoGobierno" [value]="food.value">
+                          {{food.viewValue}}
+                        </mat-option>
+                      </mat-select>
+                      
+                    </mat-form-field>
+                    <mat-checkbox class="example-margin" >Activo</mat-checkbox>
+                  </mat-grid-tile>
+
+
+
+                </mat-grid-list>
+
+    
+                <mat-grid-list cols="4" rowHeight="70px">
+                  <mat-grid-tile [colspan]="2" [rowspan] = "1">
+                    <div class="example-spacer"></div>
+                    <div class="example-spacer"></div>
+                    <div class="example-spacer"></div>
+                      <button mat-raised-button type="submit" routerLink="/dashboard/usuarios" style="margin-right: 20;">Volver</button>
+                      <div class="example-spacer"></div>
+                      
+                  </mat-grid-tile>
+          
+                  <mat-grid-tile [colspan]="2" [rowspan] = "1">
+                    
+                      <button mat-raised-button type="submit" color="primary" routerLink="/dashboard/crear-usuario">Registrar</button>
+                      <div class="example-spacer"></div>
+                  </mat-grid-tile>
+                </mat-grid-list>
+          
+          
+                <div *ngIf="listVehiculos.length > 0">
+                  <mat-form-field appearance="standard">
+                    <mat-label>Filtro</mat-label>
+                    <input matInput (keyup)="applyFilterVehiculos($event)" placeholder="Ingresar parámetro" #input autocomplete="off">
+                  </mat-form-field>
+                  <div class="mat-elevation-z8">
+                    <table mat-table [dataSource]="dataSourceVehiculos" matSort>
+                  
+                      <!-- Position Column -->
+                      <ng-container matColumnDef="placa">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Placa </th>
+                        <td mat-cell *matCellDef="let element"> {{element.placa}} </td>
+                      </ng-container>
+                    
+                      <!-- Name Column -->
+                      <ng-container matColumnDef="fechaVigencia">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Fecha Vigencia </th>
+                        <td mat-cell *matCellDef="let element"> {{element.fechaVigencia}} </td>
+                      </ng-container>
+                    
+                      <!-- Weight Column -->
+                      <ng-container matColumnDef="finVigencia">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Fin Vigencia </th>
+                        <td mat-cell *matCellDef="let element"> {{element.finVigencia}} </td>
+                      </ng-container>
+                    
+                      <!-- Symbol Column -->
+                      <ng-container matColumnDef="estadoVehiculo">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Estado </th>
+                        <td mat-cell *matCellDef="let element"> {{element.estadoVehiculo}} </td>
+                      </ng-container>
+              
+                      <ng-container matColumnDef="acciones">
+                          <th mat-header-cell *matHeaderCellDef></th>
+                          <td mat-cell *matCellDef="let element; let i = index" style="text-align: right;"> 
+                            
+                              <a class="pointer" style="color: #1f516f;"  matTooltip="Editar Vehículo">
+                                  <mat-icon>edit</mat-icon>
+                              </a>
+                              <a class="pointer" (click)="eliminarVehiculos(i)" style="color: #e15639;"  matTooltip="Eliminar Vehículo">
+                                  <mat-icon>delete</mat-icon>
+                              </a>
+                          </td>
+                        </ng-container>
+                    
+                      <tr mat-header-row *matHeaderRowDef="displayedColumnsVehiculos"></tr>
+                      <tr mat-row *matRowDef="let row; columns: displayedColumnsVehiculos;"></tr>
+                    </table>
+                      <mat-paginator [pageSizeOptions]="[5, 10, 20]"showFirstLastButtons 
+                      aria-label="Select page of periodic elements">
+                    </mat-paginator>
+                  </div>
+                </div>
+              
+              <h2 *ngIf="listVehiculos.length == 0">No hay Rutas para mostrar</h2>                               
+                    
+              </form>
+            </mat-card>
+        
+          </mat-expansion-panel>
+        </mat-accordion>  
+      </div>  
+
+    </form>
+  </mat-card>
+</div>    
+
+

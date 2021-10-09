@@ -6,5 +6,5 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'web-colectivos-sutran';
+  title = 'Web Colectivos - SUTRAN';
 }
